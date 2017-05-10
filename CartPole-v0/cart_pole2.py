@@ -14,7 +14,7 @@ def actionByAngle(observation):
 	action = 1 if angle > 0 else 0
 	return action
 
-def getAction(observation,w_s):
+def getAction(observation):
 	"""状態から行動決定"""
 	return actionByAngle(observation)
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 			env.render()
 			# time.sleep(0.3)
 
-			action = getAction(observation,w_s)
+			action = getAction(observation)
 
 			observation, reward, done, info = env.step(action)
 			total_reward += 1
