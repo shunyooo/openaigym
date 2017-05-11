@@ -8,6 +8,6 @@ openai gymのやつ
 - [動作説明コード](https://github.com/shunyooo/openaigym/blob/master/CartPole-v0/cart_pole1.py)
 - [離散的な解法-Q学習-](https://github.com/shunyooo/openaigym/blob/master/CartPole-v0/cart_pole3.py)
 
-## [MountainCar-v0](https://gym.openai.com/envs/MountainCar-v0)
-台車で山登り。[Wiki](https://github.com/openai/gym/wiki/MountainCar-v0)
+## [MountainCar-v0](https://github.com/shunyooo/openaigym/tree/master/MountainCar-v0)
+台車で山登り。[公式](https://gym.openai.com/envs/MountainCar-v0),[公式Wiki](https://github.com/openai/gym/wiki/MountainCar-v0)
 
