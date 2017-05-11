@@ -11,3 +11,6 @@ openai gymのやつ
 ## [MountainCar-v0](https://github.com/shunyooo/openaigym/tree/master/MountainCar-v0)
 台車で山登り。[公式](https://gym.openai.com/envs/MountainCar-v0),[公式Wiki](https://github.com/openai/gym/wiki/MountainCar-v0)
 
+## 他の人のやつ
+[下山くん](https://github.com/ringopie/OpneAITest)
+
