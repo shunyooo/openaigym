@@ -13,6 +13,6 @@ openai gymのやつ
 
 ## 他の人のやつ
 - [下山くん](https://github.com/ringopie/OpneAITest)
-- [川島くん]()
-- [積田くん]()
+- [川島くん](https://github.com/taka-kawa/OpenAI)
+- [積田くん](https://github.com/tsumita/openaigym)
 
