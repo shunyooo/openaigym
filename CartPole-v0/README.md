@@ -4,6 +4,8 @@
   - openai gymの環境をどのように動かすかの基本的な説明とコード。
 - [離散的な解法-Q学習-](https://github.com/shunyooo/openaigym/blob/master/CartPole-v0/cart_pole3.py)(cart_pole3.py)
   - 連続値の状態(台車位置,台車速度,ポール角度,ポール先端速度)をそれぞれ離散値に分割してMDPとして扱い、Q学習にかけてみるコード。あんまり上手くいかない。
+- [線形モデルによる解法1](https://github.com/shunyooo/openaigym/blob/master/CartPole-v0/cart_pole5.py)(cart_pole5.py)
+  - 線形モデルを作成し、そのパラメータを推定する手法。パラメータは状態数と同じ4つ用意し、その推定はランダム探索での報酬和を最大に取ったものを採用していく方式。行動は線形結合の結果から決定される。かなりうまくいく。状態が4次元程度で少ないからだと考えられる。
 
 ## Environment
 公式のを訳したやつ
