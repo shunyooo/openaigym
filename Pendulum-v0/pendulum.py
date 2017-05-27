@@ -45,20 +45,6 @@ class Pendulum:
 		"""行動決定"""
 		max_a = 2.0; min_a = -2.0
 		action = np.random.randn() * sigma + np.dot(mu.T, state) 
-
-		if debug == True:
-			print("getAction")
-			print("sigma:{:.2f}".format(sigma))
-			print("mu")
-			pprint(mu)
-			print("state")
-			pprint(state)
-			print("mu.T・state")
-			pprint(np.dot(mu.T, state))
-			print("action")
-			print(action)
-			print("-"*40)
-
 		action = min(action,max_a)
 		action = max(action,min_a)
 		return [action]
@@ -75,9 +61,6 @@ class Pendulum:
 		# 方策を正規分布で表示した時の分布
 		mu = np.random.rand(N-1) - 0.5 #平均。ガウス分布の軸。
 		sigma = np.random.rand() * 4  #分散。ガウス分布の幅。
-		# print("init")
-		# pprint(mu)
-		# pprint(sigma)
 
 		# 政策反復
 		for l in range(L):
@@ -85,8 +68,6 @@ class Pendulum:
 			drs = np.empty((0),float)# 割引報酬和 1*M
 			der = np.empty((0,N),float)# 勾配の和 M*N
 			rewards = np.empty((0,T),float)# 報酬 M*T
-			# print("init drs:",drs)
-			# print("init der:",der)
 
 			for m in range(M): # エピソード。標本抽出。
 
@@ -102,13 +83,11 @@ class Pendulum:
 				state = self.normalize(self.env.reset())# 状態を初期化、0-1に正規化
 				for t in range(T): # ステップ
 
-					debug = False
 					if m == M-1 and l%5 == 0:
-						#debug = True
 						self.env.render()
 
 					# 行動決定
-					action = self.getAction(sigma,mu,state,debug)
+					action = self.getAction(sigma,mu,state)
 
 					# 行動実行、観測
 					observation, reward, done, _ = self.env.step(action)
@@ -125,21 +104,10 @@ class Pendulum:
 					drs[m] = drs[m] + (gamma**(t-1))*rewards[m,t]# エピソード毎
 					dr = dr + (gamma**(t-1))*rewards[m,t]# 政策毎 デバッグ用
 
-					# print("drs updated episode:{}, step:{}".format(m,t))
-					# pprint(drs)
-					# print("der episode:{}, step:{}".format(m,t))
-					# pprint(der)
-					# print("-"*30)
-
 
 					if done:
 						#print("Episode %d finished after {} timesteps".format(t+1) % m)
 						break
-
-			# print("drs")
-			# pprint(drs)
-			# print("der")
-			# pprint(der)
 
 			print("政策:{}".format(l))
 			# 最小ベースラインを計算
@@ -149,13 +117,6 @@ class Pendulum:
 
 			# 勾配を推定
 			derJ = 1/M * (np.dot((drs-b),der)).T
-			
-			# print("勾配:derJ")
-			# pprint(derJ)
-			# print("pre_mu")
-			# pprint(mu)
-			# print("pre_sigma")
-			# pprint(sigma)
 
 			# モデルパラメータを更新
 			mu = mu + alpha * derJ[:-1]
@@ -168,9 +129,6 @@ class Pendulum:
 
 			print("Max={:.2f}, Min={:.2f}, Avg={:.2f}".format(np.max(drs),np.min(drs),np.mean(drs)))
 			print("-"*30)
-
-			
-
 
 
 if __name__ == '__main__':
