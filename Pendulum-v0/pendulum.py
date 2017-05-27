@@ -44,9 +44,13 @@ class Pendulum:
 	def getAction(self,sigma,mu,state,debug=False):
 		"""行動決定"""
 		max_a = 2.0; min_a = -2.0
-		action = np.random.normal(np.dot(mu.T, state), sigma ** 2, 1)
+		action = np.random.randn() * sigma + np.dot(mu.T, state) 
+		#action = np.random.normal(np.dot(mu.T, state), sigma ** 2, 1)[0]
 		if debug == True:
+			print("sigma:",sigma)
+			print("mu.T・state:",np.dot(mu.T, state))
 			print("action:",action)
+			print("-"*30)
 		action = min(action,max_a)
 		action = max(action,min_a)
 		return [action]
@@ -61,7 +65,7 @@ class Pendulum:
 
 		# 政策モデルパラメータをランダムに初期化
 		mu = np.random.rand(N-1) - 0.5 #平均。ガウス分布の軸。
-		sigma = np.random.rand() * 4  #分散。ガウス分布の幅。
+		sigma = np.random.rand() * 4  #分散。ガウス分布の片幅。
 
 		# 政策反復
 		for l in range(L):
@@ -96,40 +100,36 @@ class Pendulum:
 					state = self.normalize(observation)
 
 					# 平均muに関する勾配の観測. m行目の0行から-1行まで
-					der[m,:-1] = der[m,:-1] + (((action-np.dot(mu.T, state))*state)/(sigma**2)).T
+					der[m,:-1] += (((action-np.dot(mu.T, state))*state)/(sigma**2)).T
 
 					# 標準偏差sigmaに関する勾配の観測.m行目の最後の要素
-					der[m,-1] = der[m,-1] + ((action-np.dot(mu.T, state))**2-(sigma**2))/(sigma**3)
+					der[m,-1] += ((action-np.dot(mu.T, state))**2-(sigma**2))/(sigma**3)
 
 					# 割引報酬和の観測
-					rewards[m,t] = reward
-					drs[m] = drs[m] + (gamma**t)*rewards[m,t]# エピソード毎
-					dr = dr + (gamma**t)*rewards[m,t]# 政策毎 デバッグ用
-
+					rewards[m,t] = reward # デバッグ用
+					drs[m] += (gamma**t)*rewards[m,t]# エピソード毎
 
 					if done:
 						#print("Episode %d finished after {} timesteps".format(t+1) % m)
 						break
-
-			print("政策:{}".format(l))
+			
 			# 最小ベースラインを計算
 			b = np.dot(drs,np.diag(np.dot(der,der.T)))/np.trace(np.dot(der,der.T))
-
-			print("最小ベースライン:b")
-			pprint(b)
-
 			# 勾配を推定
 			derJ = 1/M * (np.dot((drs-b),der)).T
-
 			# モデルパラメータを更新
 			mu = mu + alpha * derJ[:-1]
 			sigma = sigma + alpha * derJ[-1]
 
+			print("政策:{}".format(l))
+			print("最小ベースライン b")
+			pprint(b)
+			print("推定勾配 derJ")
+			pprint(derJ)
 			print("updated_mu")
 			pprint(mu)
 			print("updated_sigma")
 			pprint(sigma)
-
 			print("Max={:.2f}, Min={:.2f}, Avg={:.2f}".format(np.max(drs),np.min(drs),np.mean(drs)))
 			print("-"*30)
 
