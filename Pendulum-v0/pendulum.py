@@ -179,6 +179,6 @@ if __name__ == '__main__':
 	L = 500
 	M = 200
 	T = 200
-	options = AttributeDict({"gamma":0.99,"alpha":0.9})
+	options = AttributeDict({"gamma":0.99,"alpha":0.1})
 
 	mc.PolicyGradient(L,M,T,options)
