@@ -44,7 +44,9 @@ class Pendulum:
 	def getAction(self,sigma,mu,state,debug=False):
 		"""行動決定"""
 		max_a = 2.0; min_a = -2.0
-		action = np.random.randn() * sigma + np.dot(mu.T, state) 
+		action = np.random.normal(np.dot(mu.T, state), sigma ** 2, 1)
+		if debug == True:
+			print("action:",action)
 		action = min(action,max_a)
 		action = max(action,min_a)
 		return [action]
@@ -81,12 +83,13 @@ class Pendulum:
 				# 状態の初期化
 				state = self.normalize(self.env.reset())# 状態を初期化、0-1に正規化
 				for t in range(T): # ステップ
-
+					debug = False
 					if m == M-1 and l%5 == 0:
 						self.env.render()
+						debug = True
 
 					# 行動決定
-					action = self.getAction(sigma,mu,state)
+					action = self.getAction(sigma,mu,state,debug)
 
 					# 行動実行、観測
 					observation, reward, done, _ = self.env.step(action)
@@ -111,6 +114,7 @@ class Pendulum:
 			print("政策:{}".format(l))
 			# 最小ベースラインを計算
 			b = np.dot(drs,np.diag(np.dot(der,der.T)))/np.trace(np.dot(der,der.T))
+
 			print("最小ベースライン:b")
 			pprint(b)
 
