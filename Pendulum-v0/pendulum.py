@@ -35,7 +35,6 @@ class Pendulum:
 	def __init__(self):
 		self.env = gym.make("Pendulum-v0")
 
-
 	def normalize(self, state):
 		high = self.env.observation_space.high # 状態の最大値の配列
 		low = self.env.observation_space.low   # 状態の最小値の配列
@@ -135,11 +134,11 @@ class Pendulum:
 
 
 if __name__ == '__main__':
-	mc = Pendulum()
+	p = Pendulum()
 
 	L = 500
 	M = 200
 	T = 200
 	options = AttributeDict({"gamma":0.99,"alpha":0.1})
 
-	mc.PolicyGradient(L,M,T,options)
+	p.PolicyGradient(L,M,T,options)
