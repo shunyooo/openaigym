@@ -104,7 +104,7 @@ class Pendulum:
 
 					debug = False
 					if m == M-1 and l%5 == 0:
-						debug = True
+						#debug = True
 						self.env.render()
 
 					# 行動決定
