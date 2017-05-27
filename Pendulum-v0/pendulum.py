@@ -58,7 +58,6 @@ class Pendulum:
 		alpha = options.alpha
 
 		# 政策モデルパラメータをランダムに初期化
-		# 方策を正規分布で表示した時の分布
 		mu = np.random.rand(N-1) - 0.5 #平均。ガウス分布の軸。
 		sigma = np.random.rand() * 4  #分散。ガウス分布の幅。
 
@@ -101,8 +100,8 @@ class Pendulum:
 
 					# 割引報酬和の観測
 					rewards[m,t] = reward
-					drs[m] = drs[m] + (gamma**(t-1))*rewards[m,t]# エピソード毎
-					dr = dr + (gamma**(t-1))*rewards[m,t]# 政策毎 デバッグ用
+					drs[m] = drs[m] + (gamma**t)*rewards[m,t]# エピソード毎
+					dr = dr + (gamma**t)*rewards[m,t]# 政策毎 デバッグ用
 
 
 					if done:
