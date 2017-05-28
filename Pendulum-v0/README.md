@@ -2,9 +2,9 @@
 ![2017-05-28 9 10 27](https://cloud.githubusercontent.com/assets/17490886/26525057/8fdaa462-4385-11e7-8670-6d7144337bdd.png)
 
 棒のバランスをとるようにどう力を与えるか。[公式サイト](https://gym.openai.com/envs/Pendulum-v0),[公式Wiki](https://github.com/openai/gym/wiki/Pendulum-v0)
-- 政策勾配法([pendulum.py](https://github.com/shunyooo/openaigym/blob/master/Pendulum-v0/pendulum.py))
+- 政策勾配法([pendulum.py](./pendulum.py))
   - ガウス分布による政策勾配法の適用。
-- 自然勾配法([pendulum2.py](https://github.com/shunyooo/openaigym/blob/master/Pendulum-v0/pendulum2.py))
+- 自然勾配法([pendulum2.py](./pendulum2.py))
   - ガウス分布による自然勾配法の適用。
   
 ## Environment
