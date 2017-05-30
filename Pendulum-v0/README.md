@@ -1,5 +1,5 @@
 ## Pendulum-v0
-![2017-05-28 9 10 27](https://cloud.githubusercontent.com/assets/17490886/26525057/8fdaa462-4385-11e7-8670-6d7144337bdd.png)
+![2017-05-28 9 10 27](http://tuyenple.com/assets/images/ddpg_swing.gif)
 
 棒のバランスをとるようにどう力を与えるか。[公式サイト](https://gym.openai.com/envs/Pendulum-v0),[公式Wiki](https://github.com/openai/gym/wiki/Pendulum-v0)
 - 政策勾配法([pendulum.py](./pendulum.py))
