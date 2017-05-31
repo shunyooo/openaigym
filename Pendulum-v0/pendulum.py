@@ -33,7 +33,8 @@ class AttributeDict(object):
 
 class Pendulum:
 	def __init__(self):
-		self.env = gym.make("Pendulum-v0")
+		#self.env = gym.make("Pendulum-v0")
+		self.env = gym.make("MountainCarContinuous-v0")
 
 	def normalize(self, state):
 		high = self.env.observation_space.high # 状態の最大値の配列
@@ -42,7 +43,8 @@ class Pendulum:
 
 	def getAction(self,sigma,mu,state,debug=False):
 		"""行動決定"""
-		max_a = 2.0; min_a = -2.0
+		max_a = self.env.action_space.high[0]
+		min_a = self.env.action_space.low[0]
 		action = np.random.randn() * sigma + np.dot(mu.T, state) 
 		#action = np.random.normal(np.dot(mu.T, state), sigma ** 2, 1)[0]
 		if debug == True:
@@ -57,7 +59,7 @@ class Pendulum:
 	def PolicyGradient(self,L,M,T,options):
 		"""政策勾配アルゴリズム"""
 
-		N = 4 #モデルパラメータ数(mu:3次元。状態数に基づく sigma:1次元)
+		N = self.env.observation_space.shape[0]+1 #モデルパラメータ数(mu:3次元。状態数に基づく sigma:1次元)
 
 		gamma = options.gamma
 		alpha = options.alpha
@@ -73,6 +75,8 @@ class Pendulum:
 			der = np.empty((0,N),float)# 勾配の和 M*N
 			rewards = np.empty((0,T),float)# 報酬 M*T
 
+			goal_n = 0
+
 			for m in range(M): # エピソード。標本抽出。
 
 				# 配列drsのmエピソード目を動的確保
@@ -87,7 +91,7 @@ class Pendulum:
 				state = self.normalize(self.env.reset())# 状態を初期化、0-1に正規化
 				for t in range(T): # ステップ
 					debug = False
-					if m == M-1 and l%5 == 0:
+					if m == M-1 and t == T-2:#and l%10 == 0:
 						self.env.render()
 						debug = True
 
@@ -104,12 +108,18 @@ class Pendulum:
 					# 標準偏差sigmaに関する勾配の観測.m行目の最後の要素
 					der[m,-1] += ((action-np.dot(mu.T, state))**2-(sigma**2))/(sigma**3)
 
-					# 割引報酬和の観測
-					rewards[m,t] = reward # デバッグ用
+					# 割引報酬和の観測。
+					if t == 0: 
+						rewards[m,t] = reward
+					else:
+						rewards[m,t] = reward + rewards[m,t-1] # デバッグ用
+
 					drs[m] += (gamma**t)*rewards[m,t]# エピソード毎
 
 					if done:
-						#print("Episode %d finished after {} timesteps".format(t+1) % m)
+						if t < T-2:
+							print("Episode %d finished after {} timesteps".format(t+1) % m)
+							goal_n += 1
 						break
 			
 			# 最小ベースラインを計算
@@ -130,15 +140,16 @@ class Pendulum:
 			print("updated_sigma")
 			pprint(sigma)
 			print("Max={:.2f}, Min={:.2f}, Avg={:.2f}".format(np.max(drs),np.min(drs),np.mean(drs)))
+			print("goal数:",goal_n,"/",M)
 			print("-"*30)
 
 
 if __name__ == '__main__':
 	p = Pendulum()
 
-	L = 500
-	M = 200
-	T = 200
-	options = AttributeDict({"gamma":0.99,"alpha":0.1})
+	L = 1000
+	M = 100
+	T = 1000
+	options = AttributeDict({"gamma":1.0,"alpha":0.01})
 
 	p.PolicyGradient(L,M,T,options)
