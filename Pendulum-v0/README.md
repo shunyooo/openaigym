@@ -6,7 +6,9 @@
   - ガウス分布による政策勾配法の適用。
 - 自然勾配法([pendulum2.py](./pendulum2.py))
   - ガウス分布による自然勾配法の適用。
-  
+- DQN([pendulum-dqn.py](./pendulum-dqn.py))
+  - Deep Q Learning。行動は２値。
+
 ## Environment
 公式のを訳したやつ
 
